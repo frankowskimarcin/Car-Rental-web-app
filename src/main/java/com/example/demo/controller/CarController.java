@@ -1,55 +1,91 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Car;
-import com.example.demo.repository.CarRepository;
+import com.example.demo.service.CarService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
 public class CarController {
 
     @Autowired
-    private CarRepository carRepository;
+    private CarService carService;
 
     @GetMapping("/cars")
     public List<Car> listAllCars(){
-        return carRepository.findAll();
+        return carService.carList();
     }
 
     @GetMapping("/cars/{id}")
-    public Car getCar(@PathVariable int id) throws NotFoundException {
-        Optional<Car> car = carRepository.findById(id);
-        if (car.isEmpty()) throw new NotFoundException("id: " + id + " not found");
-        return car.get();
+    public ResponseEntity<Car> getCar(@PathVariable int id){
+        try {
+            Car car = carService.carGet(id);
+            return new ResponseEntity<Car>(car, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<Car>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/cars/{id}")
     public void deleteCar(@PathVariable int id) {
-        carRepository.deleteById(id);
+        carService.carDelete(id);
     }
 
     @PostMapping("/cars")
     public void addCar(@RequestBody Car car){
-        carRepository.save(car);
+        carService.carSave(car);
     }
+
 
     @PutMapping("/cars/{id}")
-    public void updateCar(@RequestBody Car car, @PathVariable Integer id) throws NotFoundException {
-        Optional<Car> myCar = carRepository.findById(id);
-        if (myCar.isEmpty()) throw new NotFoundException("id: " + id + " not found");
-        car.setId(id);
-        carRepository.save(car);
+    public ResponseEntity<Car> updateCar(@RequestBody Car car, @PathVariable Integer id){
+        try {
+            Car myCar = carService.carGet(id);
+            car.setId(id);
+            carService.carSave(car);
+            return new ResponseEntity<Car>(car, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<Car>(HttpStatus.NOT_FOUND);
+        }
     }
 
-//    @PutMapping("/cars/rent/{id}")
-//    public void rentCar(@PathVariable Integer id) throws NotFoundException {
-//        Optional<Car> myCar = carRepository.findById(id);
-//        if (myCar.isEmpty()) throw new NotFoundException("id: " + id + " not found");
-//        myCar.
-//    }
+
+    @PutMapping("/cars/rent/{id}")
+    public void rentCar(@PathVariable Integer id){
+        try{
+            Car myCar = carService.carGet(id);
+            if (!myCar.isRentStatus()){
+                myCar.setRentStatus(true);
+                carService.carSave(myCar);
+            }else{
+                throw new RuntimeException("The car with id: " + id + " is already rented!");
+            }
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @PutMapping("/cars/return/{id}")
+    public void returnCar(@PathVariable Integer id){
+        try{
+            Car myCar = carService.carGet(id);
+            if (myCar.isRentStatus()){
+                myCar.setRentStatus(false);
+                carService.carSave(myCar);
+            } else{
+                throw new RuntimeException("The car with id: " + id + " is already returned!");
+            }
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
