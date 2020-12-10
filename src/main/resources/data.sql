@@ -14,4 +14,4 @@ insert into customer
 values(102,'Alfie', 'Solomons');
 
 insert into rental
-values(1, 1001, 'WE9BRB9', 101, 'Shelby');
+values(10, 1001, 'WE9BRB9', 101, 'Shelby');
