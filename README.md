@@ -43,4 +43,4 @@ with sample Body in JSON format:
     "REGISTRATION_PLATE": "WE123QW"
 }
 
-*DELETE* http://localhost:8081/rentals/1*
+*DELETE* http://localhost:8081/rentals/1
