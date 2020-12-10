@@ -3,9 +3,10 @@ package com.example.demo.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 @Entity
-public class Car {
+public class Car implements Serializable {
     @Id
     @GeneratedValue
     private Integer id;

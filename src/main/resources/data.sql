@@ -6,3 +6,9 @@ values(1002,'Skoda', 'Superb', 'WE123QW', false);
 
 insert into car
 values(1003,'Volkswagen', 'Arteon', 'WE01XTM', false);
+
+insert into customer
+values(101,'Tommy', 'Shelby');
+
+insert into customer
+values(102,'Alfie', 'Solomons');
