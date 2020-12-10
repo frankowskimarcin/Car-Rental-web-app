@@ -22,6 +22,10 @@ public class Car implements Serializable {
     public Car() {
     }
 
+    public Car(Integer id) {
+        this.id = id;
+    }
+
     public Car(Integer id, String brand, String model, String registrationPlate, boolean rentStatus) {
         this.id = id;
         this.brand = brand;

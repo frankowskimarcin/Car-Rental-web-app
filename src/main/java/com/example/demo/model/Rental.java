@@ -26,6 +26,10 @@ public class Rental implements Serializable {
     public Rental() {
     }
 
+    public Rental(Integer id) {
+        this.id = id;
+    }
+
     public Rental(Car car, Customer customer) {
         this.car = car;
         this.customer = customer;

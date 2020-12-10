@@ -76,35 +76,10 @@ public class RentalController {
 
         try{
             Rental myRental = rentalService.rentalGet(id);
-            System.out.println(1);
             Integer idCar = car.getId();
-            System.out.println(2);
             Optional<Car> optionalCar = Optional.ofNullable(carService.carGet(idCar));
-            System.out.println(3);
             Integer idCustomer = myRental.getCustomer().getId();
-            System.out.println(4);
             Optional<Customer> optionalCustomer = Optional.ofNullable(customerService.customerGet(idCustomer));
-            System.out.println(5);
-            deleteRental(id);
-            addRental(idCar, idCustomer);
-        } catch (NoSuchElementException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @PutMapping("/rentals/{id}")
-    public void updateRentalCustomer(@RequestBody Customer customer, @PathVariable Integer id){
-        try{
-            Rental myRental = rentalService.rentalGet(id);
-            System.out.println(1);
-            Integer idCar = myRental.getCar().getId();
-            System.out.println(2);
-            Optional<Car> optionalCar = Optional.ofNullable(carService.carGet(idCar));
-            System.out.println(3);
-            Integer idCustomer = customer.getId();
-            System.out.println(4);
-            Optional<Customer> optionalCustomer = Optional.ofNullable(customerService.customerGet(idCustomer));
-            System.out.println(5);
             deleteRental(id);
             addRental(idCar, idCustomer);
         } catch (NoSuchElementException e) {
